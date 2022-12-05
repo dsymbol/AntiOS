@@ -1,5 +1,7 @@
 @echo off
 
+title Alter Windows and hardware identifiers ~ dsymbol/antidetect
+
 if "%PROCESSOR_ARCHITECTURE%" EQU "amd64" (
 	>nul 2>&1 "%SYSTEMROOT%\SysWOW64\cacls.exe" "%SYSTEMROOT%\SysWOW64\config\system"
 ) else (
@@ -26,5 +28,5 @@ if '%errorlevel%' NEQ '0' (
     pushd "%CD%"
     CD /D "%~dp0"
 
-python.exe generate_fingerprint.py
+python.exe app\generate_fingerprint.py
 @pause
