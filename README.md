@@ -1,4 +1,4 @@
-# antidetect
+# AntiOS
 
 Alter Windows and hardware identifiers
 
