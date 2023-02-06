@@ -24,7 +24,7 @@ def generate_telemetry_fingerprint():
     """
     windows_ver = platform_version()
     if not windows_ver.startswith("Windows-10"):
-        print(">> Telemetry ID replace available for Windows 10 only")
+        print("Telemetry ID replace available for Windows 10 only")
         return
 
     current_device_id = registry_helper.read_value(
@@ -32,16 +32,16 @@ def generate_telemetry_fingerprint():
         key_path="SOFTWARE\\Microsoft\\SQMClient",
         value_name="MachineId")
     if current_device_id[1] == winreg.REG_SZ:
-        print(">> Current Windows 10 Telemetry DeviceID is {0}".format(current_device_id[0]))
+        print("Current Windows 10 Telemetry DeviceID is {0}".format(current_device_id[0]))
     else:
-        print(">> Unexpected type of HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\SQMClient Value:MachineId Type:%d" %
+        print("Unexpected type of HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\SQMClient Value:MachineId Type:%d" %
                        current_device_id[1])
         return
 
     telemetry_fp = telemetry_fingerprint.TelemetryFingerprint()
     device_id = telemetry_fp.random_device_id_guid()
     device_id_brackets = "{%s}" % telemetry_fp.random_device_id_guid()
-    print(">> New Windows 10 Telemetry DeviceID is {0}".format(device_id_brackets))
+    print("New Windows 10 Telemetry DeviceID is {0}".format(device_id_brackets))
 
     registry_helper.write_value(key_hive="HKEY_LOCAL_MACHINE",
                                 key_path="SOFTWARE\\Microsoft\\SQMClient",
@@ -53,14 +53,14 @@ def generate_telemetry_fingerprint():
     query_path = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Diagnostics\\DiagTrack\\SettingsRequests"
     setting_requests = registry_helper.enumerate_key_subkeys(key_hive="HKEY_LOCAL_MACHINE",
                                                              key_path=query_path)
-    print(">> SettingsRequest subkeys: {0}".format(setting_requests))
+    print("SettingsRequest subkeys: {0}".format(setting_requests))
 
     for request in setting_requests:
         query_params = registry_helper.read_value(key_hive="HKEY_LOCAL_MACHINE",
                                                   key_path="%s\\%s" % (query_path, request),
                                                   value_name="ETagQueryParameters")
         if query_params[1] != winreg.REG_SZ:
-            print(">> Unexpected type of %s\\%s Value:MachineId Type:%d" % (query_path, request, query_params[1]))
+            print("Unexpected type of %s\\%s Value:MachineId Type:%d" % (query_path, request, query_params[1]))
             return
 
         query_string = query_params[0]
@@ -71,7 +71,7 @@ def generate_telemetry_fingerprint():
                                     value_type=winreg.REG_SZ,
                                     key_value=new_query_string)
 
-    print(">> DeviceID has been replaced from %s to %s" % (current_device_id, device_id))
+    print("DeviceID has been replaced from %s to %s" % (current_device_id, device_id))
 
 
 def generate_network_fingerprint():
@@ -84,9 +84,9 @@ def generate_network_fingerprint():
     random_host = random_utils.random_hostname()
     random_user = random_utils.random_username()
     random_mac = random_utils.random_mac_address()
-    print(">> Random hostname value is {0}".format(random_host))
-    print(">> Random username value is {0}".format(random_user))
-    print(">> Random MAC address value is {0}".format(random_mac))
+    print("Random hostname value is {0}".format(random_host))
+    print("Random username value is {0}".format(random_user))
+    print("Random MAC address value is {0}".format(random_mac))
 
     hive = "HKEY_LOCAL_MACHINE"
     registry_helper.write_value(key_hive=hive,
@@ -263,16 +263,16 @@ def generate_windows_fingerprint():
                                 key_value=ie_install_date,
                                 access_type=Wow64RegistryEntry.KEY_WOW32_64)
 
-    print(">> Random build GUID {0}".format(system_fp.random_build_guid()))
-    print(">> Random BuildLab {0}".format(system_fp.random_build_lab()))
-    print(">> Random BuildLabEx {0}".format(system_fp.random_build_lab_ex()))
-    print(">> Random Current Build {0}".format(system_fp.random_current_build()))
-    print(">> Random Current Build number {0}".format(system_fp.random_current_build()))
-    print(">> Random Current Version {0}".format(system_fp.random_current_version()))
-    print(">> Random Edition ID {0}".format(system_fp.random_edition_id()))
-    print(">> Random Install Date {0}".format(system_fp.random_install_date()))
-    print(">> Random product ID {0}".format(system_fp.random_product_id()))
-    print(">> Random Product name {0}".format(system_fp.random_product_name()))
+    print("Random build GUID {0}".format(system_fp.random_build_guid()))
+    print("Random BuildLab {0}".format(system_fp.random_build_lab()))
+    print("Random BuildLabEx {0}".format(system_fp.random_build_lab_ex()))
+    print("Random Current Build {0}".format(system_fp.random_current_build()))
+    print("Random Current Build number {0}".format(system_fp.random_current_build()))
+    print("Random Current Version {0}".format(system_fp.random_current_version()))
+    print("Random Edition ID {0}".format(system_fp.random_edition_id()))
+    print("Random Install Date {0}".format(system_fp.random_install_date()))
+    print("Random product ID {0}".format(system_fp.random_product_id()))
+    print("Random Product name {0}".format(system_fp.random_product_name()))
 
 
 def generate_hardware_fingerprint():
@@ -321,12 +321,12 @@ def generate_hardware_fingerprint():
     command = [executable, '-nobanner', 'C:', volume_id]
     result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     volume_id_message = result.stderr if result.returncode != 0 else result.stdout
-    print(f">> {volume_id_message}", end="")
-    print(">> Random Hardware profile GUID {0}".format(hardware_fp.random_hw_profile_guid()))
-    print(">> Random Hardware CKCL GUID {0}".format(hardware_fp.random_performance_guid()))
-    print(">> Random Machine GUID {0}".format(hardware_fp.random_machine_guid()))
-    print(">> Random Windows Update GUID {0}".format(hardware_fp.random_win_update_guid()))
-    print(">> Random Windows Update Validation ID {0}".format(hardware_fp.random_win_update_guid()))
+    print(volume_id_message, end="")
+    print("Random Hardware profile GUID {0}".format(hardware_fp.random_hw_profile_guid()))
+    print("Random Hardware CKCL GUID {0}".format(hardware_fp.random_performance_guid()))
+    print("Random Machine GUID {0}".format(hardware_fp.random_machine_guid()))
+    print("Random Windows Update GUID {0}".format(hardware_fp.random_win_update_guid()))
+    print("Random Windows Update Validation ID {0}".format(hardware_fp.random_win_update_guid()))
 
 
 def main():
